@@ -1,6 +1,6 @@
 require 'forwardable'
 require 'openssl'
-module Votifier
+module MineVotifier
   class Key
 
     # Create a new key from a PEM formated string
@@ -18,7 +18,7 @@ module Votifier
     #   The format can be PEM (with the -- BEGIN headers) or plaim
     # @returns [Voritifer::Key] The object representing the key
     def self.import(key)
-      if key.is_a?(Votifier::Key)
+      if key.is_a?(MineVotifier::Key)
         key
       elsif key.respond_to?(:read)
         self.from_unknown_key_content(key.read)
@@ -37,7 +37,7 @@ module Votifier
 
     # Import a key from a string or array and detect what format and type the key is.
     # @param [Array,String] key_content The key content as a string (or array of lines)
-    # @return [Votifier::Key] The key that was imported.
+    # @return [MineVotifier::Key] The key that was imported.
     def self.from_unknown_key_content(key_content)
       if key_content.is_a?(Array)
         if key_content[0].match(/\n/)
@@ -60,7 +60,7 @@ module Votifier
     # Import a non-PEM key from a filename
     # @param [String] key_file The filename of the key without the PEM headers.
     # @param [Symbol] type The type of key, Either :public or :private. Defaults to :private
-    # @return [Votifier::Key] The imported key
+    # @return [MineVotifier::Key] The imported key
     def self.from_key_file(key_file, type = :private)
       key_content = File.read(key_file)
       self.from_key_content(key_content, type)
@@ -69,7 +69,7 @@ module Votifier
     # Import a non-PEM key from a String
     # @param [String] key_content The actual key content in a non-PEM format.
     # @param [Symbol] type The type of key, Either :public or :private. Defaults to :private
-    # @return [Votifier::Key] The imported key
+    # @return [MineVotifier::Key] The imported key
     def self.from_key_content(key_content, type = :private)
       pem_key_content = self.convert_to_pem_format(key_content, type)
       self.from_pem_key_content(pem_key_content)
@@ -77,7 +77,7 @@ module Votifier
 
     # Import a PEM key from a filename
     # @param [String] key_file The filename of the PEM key
-    # @return [Votifier::Key] The imported key
+    # @return [MineVotifier::Key] The imported key
     def self.from_pem_key_file(key_file)
       key_content = File.read(key_file)
       self.from_pem_key_content(key_content)
@@ -85,7 +85,7 @@ module Votifier
 
     # Import a PEM key from a string
     # @param [String] key_content The actual key content in a PEM format.
-    # @return [Votifier::Key] The imported key
+    # @return [MineVotifier::Key] The imported key
     def self.from_pem_key_content(pem_key_content)
       self.new(pem_key_content)
     end

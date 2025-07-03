@@ -7,7 +7,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     public_pem_file_name = File.expand_path('../../config/sample-public.pem', __FILE__)
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(public_pem_file_name)
+      key = MineVotifier::Key.import(public_pem_file_name)
     end
     assert !key.nil?
   end
@@ -16,7 +16,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     private_pem_file_name = File.expand_path('../../config/sample-private.pem', __FILE__)
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(private_pem_file_name)
+      key = MineVotifier::Key.import(private_pem_file_name)
     end
     assert !key.nil?
   end
@@ -26,7 +26,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     public_pem_file_obj = File.open(public_pem_file_name, 'r')
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(public_pem_file_obj)
+      key = MineVotifier::Key.import(public_pem_file_obj)
     end
     assert !key.nil?
   end
@@ -36,7 +36,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     private_pem_file_obj = File.open(private_pem_file_name, 'r')
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(private_pem_file_obj)
+      key = MineVotifier::Key.import(private_pem_file_obj)
     end
     assert !key.nil?
   end
@@ -46,7 +46,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     public_pem_file_string = File.open(public_pem_file_name, 'r').read
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(public_pem_file_string)
+      key = MineVotifier::Key.import(public_pem_file_string)
     end
     assert !key.nil?
   end
@@ -56,7 +56,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     private_pem_file_string = File.open(private_pem_file_name, 'r')
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(private_pem_file_string)
+      key = MineVotifier::Key.import(private_pem_file_string)
     end
     assert !key.nil?
   end
@@ -65,7 +65,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     public_non_pem_file_name = File.expand_path('../../config/sample-public.key', __FILE__)
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(public_non_pem_file_name)
+      key = MineVotifier::Key.import(public_non_pem_file_name)
     end
     assert !key.nil?
   end
@@ -74,7 +74,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     private_non_pem_file_name = File.expand_path('../../config/sample-private.key', __FILE__)
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(private_non_pem_file_name)
+      key = MineVotifier::Key.import(private_non_pem_file_name)
     end
     assert !key.nil?
   end
@@ -84,7 +84,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     public_non_pem_file_obj = File.open(public_non_pem_file_name, 'r')
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(public_non_pem_file_obj)
+      key = MineVotifier::Key.import(public_non_pem_file_obj)
     end
     assert !key.nil?
   end
@@ -94,7 +94,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     private_non_pem_file_obj = File.open(private_non_pem_file_name, 'r')
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(private_non_pem_file_obj)
+      key = MineVotifier::Key.import(private_non_pem_file_obj)
     end
     assert !key.nil?
   end
@@ -104,7 +104,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     public_non_pem_file_string = File.open(public_non_pem_file_name, 'r').read
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(public_non_pem_file_string)
+      key = MineVotifier::Key.import(public_non_pem_file_string)
     end
     assert !key.nil?
   end
@@ -114,7 +114,7 @@ class VotifierKeyTest < Test::Unit::TestCase
     private_non_pem_file_string = File.open(private_non_pem_file_name, 'r')
     key = nil
     assert_nothing_raised do
-      key = Votifier::Key.import(private_non_pem_file_string)
+      key = MineVotifier::Key.import(private_non_pem_file_string)
     end
     assert !key.nil?
   end

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require File.expand_path('../../lib/votifier', __FILE__)
+require File.expand_path('../../lib/mine_votifier', __FILE__)
 
 private_key_file = File.expand_path('../../config/sample-private.key', __FILE__)
-Votifier::Server.new(private_key_file, '0.0.0.0:8193').listen
+MineVotifier::Server.new(private_key_file, '0.0.0.0:8193').listen

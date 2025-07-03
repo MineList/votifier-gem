@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/votifier/version', __FILE__)
+require File.expand_path('../lib/mine_votifier/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name          = 'votifier'
@@ -15,6 +15,6 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.9.1'
   gem.add_development_dependency "rspec"
 
-  gem.version       = Votifier::VERSION
+  gem.version       = MineVotifier::VERSION
   gem.date          = '2013-09-08'
 end

@@ -1,5 +1,5 @@
-# lib/votifier/packet_builder.rb
-module Votifier
+# lib/mine_votifier/packet_builder.rb
+module MineVotifier
   # Builds the Votifier packet string from provided options.
   class PacketBuilder
     # @param service_name [String] the Votifier service name

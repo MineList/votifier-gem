@@ -1,4 +1,4 @@
-module Votifier
+module MineVotifier
   class Vote
     attr_reader :service_name, :username, :ip_address, :timestamp
 

@@ -1,4 +1,4 @@
-module Votifier
+module MineVotifier
   class MinecraftServer
 
     DEFAULT_HOSTNAME = 'localhost'
@@ -14,8 +14,8 @@ module Votifier
 
     def initialize(key, *args)
       raise 'The key parameter is required' unless !key.nil? && key != ""
-      @key = Votifier::Key.import(key)
-      raise 'Votifier::MinecraftServer#new accept 1 to 3 parameters only.' unless args.size <= 2
+      @key = MineVotifier::Key.import(key)
+      raise 'MineVotifier::MinecraftServer#new accept 1 to 3 parameters only.' unless args.size <= 2
       self.send(:host=, *args)
     end
 

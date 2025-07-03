@@ -1,5 +1,5 @@
 require 'socket'               # Get sockets from stdlib
-module Votifier
+module MineVotifier
   class Server
 
     attr_reader :minecraft_server
@@ -9,11 +9,11 @@ module Votifier
       if args.size == 1 && args[0].respond_to?(:hostname) && args[0].respond_to?(:port) && args[0].respond_to?(:private_decrypt)
         @minecraft_server = args[0]
       elsif args.size == 1 && (args[0].respond_to?(:to_s) || args[0].respond_to?(:private_decrypt))
-        @minecraft_server = Votifier::MinecraftServer.new(args[0])
+        @minecraft_server = MineVotifier::MinecraftServer.new(args[0])
       elsif args.size == 2
-        @minecraft_server = Votifier::MinecraftServer.new(args[0], args[1])
+        @minecraft_server = MineVotifier::MinecraftServer.new(args[0], args[1])
       elsif args.size == 3
-        @minecraft_server = Votifier::MinecraftServer.new(args[0], args[1], args[2])
+        @minecraft_server = MineVotifier::MinecraftServer.new(args[0], args[1], args[2])
       else
         raise "Invalid parameters : #{args.inspect}"
       end

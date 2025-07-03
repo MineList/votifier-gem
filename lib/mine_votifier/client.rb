@@ -1,6 +1,6 @@
 require 'socket'
 
-module Votifier
+module MineVotifier
   # Client for sending votes to a Votifier server using TCP sockets.
   class Client
     DEFAULT_TIMEOUT = 5
@@ -30,7 +30,7 @@ module Votifier
     def send_vote(username: nil, ip_address: nil, timestamp: nil)
       validate_username!(username)
 
-      packet = Votifier::PacketBuilder.new(
+      packet = MineVotifier::PacketBuilder.new(
         service_name,
         username:   username,
         ip_address: ip_address,

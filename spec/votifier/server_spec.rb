@@ -1,10 +1,10 @@
 require 'spec_helper'
-describe Votifier::Server do
+describe MineVotifier::Server do
 
   context "default parameters" do
     before do
       @private_key_file = File.expand_path('../../../config/sample-private.key', __FILE__)
-      @server = Votifier::Server.new(@private_key_file)
+      @server = MineVotifier::Server.new(@private_key_file)
     end
 
     context "#open_tcp_server" do

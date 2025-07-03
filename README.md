@@ -19,10 +19,10 @@ require 'votifier'
 
 # Initialize server with public key and host:port
 public_key = File.expand_path('config/sample-public.key', __dir__)
-server = Votifier::MinecraftServer.new(public_key, 'some.minecraft-server.com:8192')
+server = MineVotifier::MinecraftServer.new(public_key, 'some.minecraft-server.com:8192')
 
 # Create client with keyword arguments
-client = Votifier::Client.new(
+client = MineVotifier::Client.new(
   service_name:     'MineList.kr',
   minecraft_server: server
 )
@@ -45,13 +45,13 @@ You can pass a `Key` object directly to `MinecraftServer` initializer:
 
 ```ruby
 raw_key = 'KEY STRING'
-key     = Votifier::Key.from_key_content(raw_key, :public)
-server  = Votifier::MinecraftServer.new(
+key     = MineVotifier::Key.from_key_content(raw_key, :public)
+server  = MineVotifier::MinecraftServer.new(
   key,
   'some.minecraft-server.com',
   8192
 )
-client = Votifier::Client.new(
+client = MineVotifier::Client.new(
   service_name:     'MineList.kr',
   minecraft_server: server
 )
@@ -61,18 +61,18 @@ client.send_vote(username: 'Notch')
 ### MinecraftServer initialization options
 
 ```ruby
-Votifier::MinecraftServer.new(public_key)                            # localhost:8192
-Votifier::MinecraftServer.new(public_key, 'host.example.com')         # host:8192
-Votifier::MinecraftServer.new(public_key, 9999)                       # localhost:9999
-Votifier::MinecraftServer.new(public_key, 'host:9999')               
-Votifier::MinecraftServer.new(public_key, 'host.example.com', 9999)
+MineVotifier::MinecraftServer.new(public_key)                            # localhost:8192
+MineVotifier::MinecraftServer.new(public_key, 'host.example.com')         # host:8192
+MineVotifier::MinecraftServer.new(public_key, 9999)                       # localhost:9999
+MineVotifier::MinecraftServer.new(public_key, 'host:9999')               
+MineVotifier::MinecraftServer.new(public_key, 'host.example.com', 9999)
 ```
 
 ## Server
 
 ```ruby
 require 'votifier'
-Votifier::Server.new(private_key_file, '0.0.0.0:8193').listen
+MineVotifier::Server.new(private_key_file, '0.0.0.0:8193').listen
 ```
 
 ## TODO
