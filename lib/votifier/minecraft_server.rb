@@ -14,13 +14,9 @@ module Votifier
 
     def initialize(key, *args)
       raise 'The key parameter is required' unless !key.nil? && key != ""
-      init_key(key)
+      @key = Votifier::Key.import(key)
       raise 'Votifier::MinecraftServer#new accept 1 to 3 parameters only.' unless args.size <= 2
       self.send(:host=, *args)
-    end
-
-    def init_key(key)
-      @key = Votifier::Key.import(key)
     end
 
     def host=(*args)
