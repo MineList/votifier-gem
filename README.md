@@ -34,8 +34,8 @@ You can pass Key object to MinecraftServer initalizer directly. If you don't tru
 
 ```ruby
 votifier_key = "KEY STRING"
-pem_content = Votifier::Key.from_key_content(votifier_key, :public)
-key = Votifier::Key.new(pem_content)
+key = Votifier::Key.from_key_content(votifier_key, :public)
+server = Votifier::MinecraftServer.new(key, "some.minecraft-server.com", 8192)
 votifier_client = Votifier::Client.new("MineList.kr", server)
 votifier_client.send(username: "Notch")
 ```
