@@ -30,6 +30,16 @@ votifier = Votifier::Client.new("MineList.kr", server)
 votifier.send(username: "Notch", ip_address: @ip_address, timestamp: @timestamp)
 ```
 
+You can pass Key object to MinecraftServer initalizer directly. If you don't trust key, it is recommended to use this way.
+
+```ruby
+votifier_key = "KEY STRING"
+pem_content = Votifier::Key.from_key_content(votifier_key, :public)
+key = Votifier::Key.new(pem_content)
+votifier_client = Votifier::Client.new("MineList.kr", server)
+votifier_client.send(username: "Notch")
+```
+
 The MinecraftServer can receive the hostname/port in different ways:
 
 ```ruby

@@ -14,11 +14,13 @@ module Votifier
     # Example Usage:
     #  key = Voritifer::Key.import(file_name)
     #
-    # @param  [Mixed] key An RSA private or public key as a filename, a File object or a String.
+    # @param  [Mixed] key An RSA private or public key as a filename, a File object or a String or Key object.
     #   The format can be PEM (with the -- BEGIN headers) or plaim
     # @returns [Voritifer::Key] The object representing the key
     def self.import(key)
-      if key.respond_to?(:read)
+      if key.is_a?(Votifier::Key)
+        key
+      elsif key.respond_to?(:read)
         self.from_unknown_key_content(key.read)
       elsif key.match('pub.*\.key$')
         self.from_key_file(key, :public)
