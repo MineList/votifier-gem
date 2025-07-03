@@ -30,7 +30,7 @@ module Votifier
     def send_vote(username: nil, ip_address: nil, timestamp: nil)
       validate_username!(username)
 
-      packet = PacketBuilder.new(
+      packet = Votifier::PacketBuilder.new(
         service_name,
         username:   username,
         ip_address: ip_address,
