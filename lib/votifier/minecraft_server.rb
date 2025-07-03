@@ -21,7 +21,7 @@ module Votifier
 
     def host=(*args)
       args.each do |arg|
-        if arg.is_a?(Fixnum) || arg == arg.to_s.to_i.to_s
+        if arg.is_a?(Integer) || arg == arg.to_s.to_i.to_s
           @port = arg.to_i
         elsif arg.respond_to?(:to_s) && arg.to_s.match(IP_OR_HOSTNAME_REGEXP)
           @hostname = arg.to_s
