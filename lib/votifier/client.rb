@@ -34,7 +34,7 @@ module Votifier
       @ips ||= Socket.ip_address_list
     end
 
-    def send opts = {}
+    def send(opts = {})
       validate!(opts)
       votifier_string = to_unencrypted_packet_array(opts).join("\n")
       encrypted = minecraft_server.encrypt(votifier_string)
