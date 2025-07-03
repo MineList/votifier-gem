@@ -4,4 +4,9 @@ require File.expand_path('../../lib/votifier', __FILE__)
 
 public_key_file = File.expand_path('../../config/sample-public.key', __FILE__)
 server = Votifier::MinecraftServer.new(public_key_file, '127.0.0.1:8193')
-Votifier::Client.new("Testing", server).send(:username => "Notch")
+
+client = Votifier::Client.new(
+  service_name:     'Testing',
+  minecraft_server: server
+)
+client.send_vote(username: 'Notch')

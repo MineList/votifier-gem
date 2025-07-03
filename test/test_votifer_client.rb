@@ -18,21 +18,32 @@ class VotifierClientTest < Test::Unit::TestCase
 
   def test_votifier_client_default
     server = Votifier::MinecraftServer.new(@public_key_file)
-    Votifier::Client.new("Testing", server, :socket_object => @socket_mock).send
+    client = Votifier::Client.new(
+      service_name:     "Testing",
+      minecraft_server: server
+    )
+    client.send_vote
     assert @socket_mock.verify
   end
 
   def test_votifier_client_username
     server = Votifier::MinecraftServer.new(@public_key_file)
-    Votifier::Client.new("Testing", server, :socket_object => @socket_mock).send(:username => "Notch")
+    client = Votifier::Client.new(
+      service_name:     "Testing",
+      minecraft_server: server
+    )
+    client.send_vote(username: "Notch")
     assert @socket_mock.verify
   end
 
   def test_votifier_client_postpone_setting_hostname_port
     server = Votifier::MinecraftServer.new(@public_key_file, "some.mincraft-server.com")
-    votifier = Votifier::Client.new("Testing", server, :socket_object => @socket_mock)
+    client = Votifier::Client.new(
+      service_name:     "Testing",
+      minecraft_server: server
+    )
     @socket_mock.expect(:open, @socket_mock, [server.hostname, server.port])
-    votifier.send(:username => "Notch")
+    client.send_vote(username: "Notch")
     assert @socket_mock.verify
   end
 
