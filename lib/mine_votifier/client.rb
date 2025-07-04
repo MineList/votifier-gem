@@ -57,13 +57,13 @@ module MineVotifier
       end
     end
 
-    # Validates the username length if provided.
+    # Validates the username presence
     # @param name [String, nil] the username to validate
-    # @raise [ValidationError] when username is not nil and length is not between 2 and 16
+    # @raise [ValidationError] when username is not nil
     # @return [void]
     def validate_username!(name)
-      return if name.nil? || name.size.between?(2, 16)
-      raise ValidationError, "username must be between 2 and 16 characters: \#{name.inspect}"
+      return if name.nil? 
+      raise ValidationError, "username should not empty: \#{name.inspect}"
     end
   end
 
