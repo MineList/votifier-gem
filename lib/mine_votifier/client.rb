@@ -62,7 +62,7 @@ module MineVotifier
     # @raise [ValidationError] when username is not nil
     # @return [void]
     def validate_username!(name)
-      return if name.nil? 
+      return unless name.nil?
       raise ValidationError, "username should not empty: \#{name.inspect}"
     end
   end
