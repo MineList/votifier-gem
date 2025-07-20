@@ -53,7 +53,9 @@ module MineVotifier
         minecraft_server.port,
         connect_timeout: timeout
       ) do |sock|
-        sock.print(encrypted)
+        sock.setsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY, 1)
+        sock.write(encrypted)
+        sock.flush
       end
     end
 
