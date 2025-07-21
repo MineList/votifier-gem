@@ -56,6 +56,8 @@ module MineVotifier
         sock.setsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY, 1)
         sock.write(encrypted)
         sock.flush
+
+        sock.close_write
       end
     end
 
