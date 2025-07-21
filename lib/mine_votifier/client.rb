@@ -56,9 +56,14 @@ module MineVotifier
         sock.setsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY, 1)
         sock.write(encrypted)
         sock.flush
-
         sock.close_write
+
+        Timeout.timeout(timeout) do
+          loop { sock.readpartial(256) }
+        end
       end
+    rescue EOFError
+      # FIN received, no further data to read
     end
 
     # Validates the username presence
