@@ -4,10 +4,10 @@ module MineVotifier
     DEFAULT_HOSTNAME = 'localhost'
     DEFAULT_PORT     = 8192
 
-    IP_REGEXP = Regexp.new('\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b')
-    HOSTNAME_REGEXP = Regexp.new('\b(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])\b')
-    IP_OR_HOSTNAME_REGEXP = Regexp.new('^(' + IP_REGEXP.to_s + '|' + HOSTNAME_REGEXP.to_s + ')$')
-    IP_OR_HOSTNAME_WITH_PORT_REGEXP = Regexp.new('^(' + IP_REGEXP.to_s + '|' + HOSTNAME_REGEXP.to_s + '):\d+$')
+    IP_REGEXP = /\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/
+    HOSTNAME_REGEXP = /(?!-)(?:[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)*(?!-)(?:[a-zA-Z0-9-]{1,62}[a-zA-Z0-9])/
+    IP_OR_HOSTNAME_REGEXP = /\A(#{IP_REGEXP}|#{HOSTNAME_REGEXP})\z/
+    IP_OR_HOSTNAME_WITH_PORT_REGEXP = /\A(#{IP_REGEXP.source}|#{HOSTNAME_REGEXP.source}):\d+\z/
 
     attr_accessor :hostname, :port, :public_key
     attr_reader :key
