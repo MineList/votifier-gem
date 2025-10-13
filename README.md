@@ -1,4 +1,4 @@
-# Votifier Gem (Alpha Version)
+# Votifier Gem
 
 Ruby Gem for a Votifier Server and Client for Minecraft
 
