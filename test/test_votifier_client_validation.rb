@@ -24,6 +24,30 @@ class VotifierClientValidationTest < Test::Unit::TestCase
     end
   end
 
+  def test_non_string_username_raises_validation_error
+    client = build_client
+
+    assert_raise(MineVotifier::ValidationError) do
+      client.send_vote(username: 1234, ip_address: '127.0.0.1')
+    end
+  end
+
+  def test_short_username_string_is_valid
+    client = build_client
+
+    assert_nothing_raised do
+      client.send_vote(username: 'A', ip_address: '127.0.0.1')
+    end
+  end
+
+  def test_long_username_string_is_valid
+    client = build_client
+
+    assert_nothing_raised do
+      client.send_vote(username: 'A' * 64, ip_address: '127.0.0.1')
+    end
+  end
+
   def test_ip_address_with_newline_raises_validation_error
     client = build_client
 
