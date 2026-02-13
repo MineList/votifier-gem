@@ -25,7 +25,8 @@ module MineVotifier
     # @param username [String, nil] the username to vote for (2-16 characters)
     # @param ip_address [String, nil] the IP address of the voter, defaults to 127.0.0.1 if nil
     # @param timestamp [Integer, nil] UNIX timestamp for the vote
-    # @raise [ValidationError] if username length is invalid
+    # @raise [ValidationError] if username is nil
+    # @raise [ReadTimeoutError] if server read does not complete before timeout
     # @return [void]
     def send_vote(username: nil, ip_address: nil, timestamp: nil)
       validate_username!(username)
@@ -46,6 +47,7 @@ module MineVotifier
     # Opens a new TCP socket to the configured server and sends encrypted data.
     # Socket is automatically closed when the block ends.
     # @param encrypted [String] the encrypted packet to send
+    # @raise [ReadTimeoutError] if server read does not complete before timeout
     # @return [void]
     def send_to_server(encrypted)
       Socket.tcp(
@@ -58,12 +60,26 @@ module MineVotifier
         sock.flush
         sock.close_write
 
-        Timeout.timeout(timeout) do
-          loop { sock.readpartial(256) }
+        deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + timeout
+
+        loop do
+          remaining = deadline - Process.clock_gettime(Process::CLOCK_MONOTONIC)
+          raise ReadTimeoutError, 'socket read timed out' if remaining <= 0
+
+          ready = IO.select([sock], nil, nil, remaining)
+          # IO.select timeout (nil) means no read event was observed within remaining time.
+          break unless ready
+
+          begin
+            # FIN from peer is surfaced as EOFError by read_nonblock, handled below.
+            sock.read_nonblock(256)
+          rescue IO::WaitReadable
+            next
+          end
         end
       end
     rescue EOFError
-      # FIN received, no further data to read
+      # Peer half-closed (TCP FIN) and no further data is readable.
     end
 
     # Validates the username presence
@@ -75,6 +91,10 @@ module MineVotifier
       raise ValidationError, "username should not empty: \#{name.inspect}"
     end
   end
+
+
+  # Raised when socket read exceeds configured timeout.
+  class ReadTimeoutError < StandardError; end
 
   # Raised when validation fails in Votifier client.
   class ValidationError < StandardError; end
