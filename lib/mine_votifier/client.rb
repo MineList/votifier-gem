@@ -64,11 +64,11 @@ module MineVotifier
 
         loop do
           remaining = deadline - Process.clock_gettime(Process::CLOCK_MONOTONIC)
-          raise ReadTimeoutError, 'socket read timed out' if remaining <= 0
+          raise ReadTimeoutError, "socket read timed out (reason=remaining<=0, remaining=#{remaining})" if remaining <= 0
 
           ready = IO.select([sock], nil, nil, remaining)
           # IO.select timeout (nil) means no read event was observed within remaining time.
-          raise ReadTimeoutError, 'socket read timed out' unless ready
+          raise ReadTimeoutError, "socket read timed out (reason=io_select_timeout, remaining=#{remaining})" unless ready
 
           begin
             # FIN from peer is surfaced as EOFError by read_nonblock, handled below.
