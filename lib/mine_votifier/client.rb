@@ -25,7 +25,7 @@ module MineVotifier
 
     # Sends a vote packet encrypted via the MinecraftServer and over TCP.
     # @param username [String, nil] the username to vote for (2-16 characters)
-    # @param ip_address [#to_s, nil] the IP address of the voter, defaults to 127.0.0.1 if nil
+    # @param ip_address [String, nil] the IP address of the voter, defaults to 127.0.0.1 if nil
     # @param timestamp [Integer, nil] UNIX timestamp for the vote
     # @raise [ValidationError] if service_name/username/ip_address include a newline
     # @raise [ValidationError] if username is nil or not 2-16 characters
@@ -108,21 +108,25 @@ module MineVotifier
 
     # Validates ip address safety.
     # @param address [String, nil] the ip address to validate
-    # @raise [ValidationError] when ip address includes a newline
+    # @raise [ValidationError] when ip address is not a String or includes a newline
     # @return [void]
     def validate_ip_address!(address)
       return if address.nil?
+
+      unless address.is_a?(String)
+        raise ValidationError, "ip_address should be String: #{address.inspect}"
+      end
+
       validate_no_newline!("ip_address", address)
     end
 
     # Validates protocol field safety against newline injection.
     # @param field [String] field name for error message
-    # @param value [#to_s] field value to validate
+    # @param value [String] field value to validate
     # @raise [ValidationError] when value includes CR/LF
     # @return [void]
     def validate_no_newline!(field, value)
-      normalized = value.to_s
-      return unless normalized.include?("\n") || normalized.include?("\r")
+      return unless value.include?("\n") || value.include?("\r")
 
       raise ValidationError, "#{field} should not include CR/LF: #{value.inspect}"
     end

@@ -16,10 +16,10 @@ class VotifierClientValidationTest < Test::Unit::TestCase
     client
   end
 
-  def test_ipaddr_object_is_handled_without_invalid_address_error
+  def test_non_string_ip_address_raises_validation_error
     client = build_client
 
-    assert_nothing_raised do
+    assert_raise(MineVotifier::ValidationError) do
       client.send_vote(username: 'Notch', ip_address: IPAddr.new('127.0.0.1'))
     end
   end
