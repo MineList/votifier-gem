@@ -68,7 +68,7 @@ module MineVotifier
 
           ready = IO.select([sock], nil, nil, remaining)
           # IO.select timeout (nil) means no read event was observed within remaining time.
-          break unless ready
+          raise ReadTimeoutError, 'socket read timed out' unless ready
 
           begin
             # FIN from peer is surfaced as EOFError by read_nonblock, handled below.
