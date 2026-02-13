@@ -47,4 +47,28 @@ class VotifierClientValidationTest < Test::Unit::TestCase
       client.send_vote(username: 'Notch', ip_address: '127.0.0.1')
     end
   end
+
+  def test_single_character_username_is_valid
+    client = build_client
+
+    assert_nothing_raised do
+      client.send_vote(username: 'N')
+    end
+  end
+
+  def test_empty_username_is_valid
+    client = build_client
+
+    assert_nothing_raised do
+      client.send_vote(username: '')
+    end
+  end
+
+  def test_username_longer_than_16_characters_raises_validation_error
+    client = build_client
+
+    assert_raise(MineVotifier::ValidationError) do
+      client.send_vote(username: 'a' * 17)
+    end
+  end
 end

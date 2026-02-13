@@ -24,11 +24,11 @@ module MineVotifier
     end
 
     # Sends a vote packet encrypted via the MinecraftServer and over TCP.
-    # @param username [String, nil] the username to vote for (2-16 characters)
+    # @param username [String, nil] the username to vote for (up to 16 characters)
     # @param ip_address [String, nil] the IP address of the voter, defaults to 127.0.0.1 if nil
     # @param timestamp [Integer, nil] UNIX timestamp for the vote
     # @raise [ValidationError] if service_name/username/ip_address include a newline
-    # @raise [ValidationError] if username is nil or not 2-16 characters
+    # @raise [ValidationError] if username is nil or longer than 16 characters
     # @raise [ReadTimeoutError] if server read does not complete before timeout
     # @return [void]
     def send_vote(username: nil, ip_address: nil, timestamp: nil)
@@ -97,11 +97,11 @@ module MineVotifier
 
     # Validates username safety.
     # @param name [String, nil] the username to validate
-    # @raise [ValidationError] when username is nil, out of length range, or includes a newline
+    # @raise [ValidationError] when username is nil, longer than 16 characters, or includes a newline
     # @return [void]
     def validate_username!(name)
       raise ValidationError, "username should not empty: #{name.inspect}" if name.nil?
-      raise ValidationError, "username length should be 2..16: #{name.inspect}" unless (2..16).cover?(name.length)
+      raise ValidationError, "username length should be <=16: #{name.inspect}" if name.length > 16
 
       validate_no_newline!("username", name)
     end
