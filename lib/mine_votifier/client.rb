@@ -108,10 +108,15 @@ module MineVotifier
 
     # Validates ip address safety.
     # @param address [String, nil] the ip address to validate
-    # @raise [ValidationError] when ip address includes a newline
+    # @raise [ValidationError] when ip address is not a String or includes a newline
     # @return [void]
     def validate_ip_address!(address)
       return if address.nil?
+
+      unless address.is_a?(String)
+        raise ValidationError, "ip_address should be String: #{address.inspect}"
+      end
+
       validate_no_newline!("ip_address", address)
     end
 
