@@ -16,6 +16,8 @@ module MineVotifier
     # @param minecraft_server [#hostname, #port, #encrypt] server details and encryption provider
     # @param timeout [Integer] connection timeout in seconds (defaults to DEFAULT_TIMEOUT)
     def initialize(service_name:, minecraft_server:, timeout: DEFAULT_TIMEOUT)
+      validate_service_name!(service_name)
+
       @service_name     = service_name
       @minecraft_server = minecraft_server
       @timeout          = timeout
@@ -25,11 +27,13 @@ module MineVotifier
     # @param username [String, nil] the username to vote for (2-16 characters)
     # @param ip_address [String, nil] the IP address of the voter, defaults to 127.0.0.1 if nil
     # @param timestamp [Integer, nil] UNIX timestamp for the vote
-    # @raise [ValidationError] if username is nil
+    # @raise [ValidationError] if service_name/username/ip_address include a newline
+    # @raise [ValidationError] if username is nil or not 2-16 characters
     # @raise [ReadTimeoutError] if server read does not complete before timeout
     # @return [void]
     def send_vote(username: nil, ip_address: nil, timestamp: nil)
       validate_username!(username)
+      validate_ip_address!(ip_address)
 
       packet = MineVotifier::PacketBuilder.new(
         service_name,
@@ -82,13 +86,44 @@ module MineVotifier
       # Peer half-closed (TCP FIN) and no further data is readable.
     end
 
-    # Validates the username presence
+    # Validates service name safety.
+    # @param name [String] the service name to validate
+    # @raise [ValidationError] when service name is nil/empty or includes a newline
+    # @return [void]
+    def validate_service_name!(name)
+      raise ValidationError, "service_name should not be empty" if name.nil? || name.empty?
+      validate_no_newline!("service_name", name)
+    end
+
+    # Validates username safety.
     # @param name [String, nil] the username to validate
-    # @raise [ValidationError] when username is not nil
+    # @raise [ValidationError] when username is nil, out of length range, or includes a newline
     # @return [void]
     def validate_username!(name)
-      return unless name.nil?
-      raise ValidationError, "username should not empty: \#{name.inspect}"
+      raise ValidationError, "username should not empty: #{name.inspect}" if name.nil?
+      raise ValidationError, "username length should be 2..16: #{name.inspect}" unless (2..16).cover?(name.length)
+
+      validate_no_newline!("username", name)
+    end
+
+    # Validates ip address safety.
+    # @param address [String, nil] the ip address to validate
+    # @raise [ValidationError] when ip address includes a newline
+    # @return [void]
+    def validate_ip_address!(address)
+      return if address.nil?
+      validate_no_newline!("ip_address", address)
+    end
+
+    # Validates protocol field safety against newline injection.
+    # @param field [String] field name for error message
+    # @param value [String] field value to validate
+    # @raise [ValidationError] when value includes CR/LF
+    # @return [void]
+    def validate_no_newline!(field, value)
+      return unless value.include?("\n") || value.include?("\r")
+
+      raise ValidationError, "#{field} should not include CR/LF: #{value.inspect}"
     end
   end
 
