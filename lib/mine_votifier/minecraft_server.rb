@@ -3,6 +3,7 @@ module MineVotifier
 
     DEFAULT_HOSTNAME = 'localhost'
     DEFAULT_PORT     = 8192
+    MAX_ENCRYPT_ATTEMPTS = 32
 
     IP_REGEXP = /\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/
     HOSTNAME_REGEXP = /(?!-)(?:[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)*(?!-)(?:[a-zA-Z0-9-]{1,62}[a-zA-Z0-9])/
@@ -41,9 +42,13 @@ module MineVotifier
     end
 
     def encrypt(votifier_string)
-      encrypted = key.public_encrypt(votifier_string)
-      raise "Error encrypting, invalid size: #{encrypted.bytesize}" unless encrypted.bytesize == 256
-      encrypted
+      MAX_ENCRYPT_ATTEMPTS.times do
+        encrypted = key.public_encrypt(votifier_string)
+        raise "Error encrypting, invalid size: #{encrypted.bytesize}" unless encrypted.bytesize == 256
+        return encrypted unless collides_with_v2_prefix?(encrypted)
+      end
+
+      raise "Error encrypting, ciphertext collided with Votifier v2 prefix after #{MAX_ENCRYPT_ATTEMPTS} attempts"
     end
 
     def private_decrypt(encrypted)
@@ -56,6 +61,16 @@ module MineVotifier
 
     def default_port
       DEFAULT_PORT
+    end
+
+    private
+
+    # Avoid Votifier v2 protocol detection prefixes in PKCS#1 v1.5 ciphertexts:
+    # - 0x7B ('{'): treated as v2 JSON by VotifierPlus (<= 1.4.3), SimpleVote, TimberVoter
+    # - 0x73 0x3A ("s:"): treated as v2 frame magic by NuVotifier, AzuVotifier, VotifierPlus (<= 1.4.3)
+    def collides_with_v2_prefix?(encrypted)
+      first_byte = encrypted.getbyte(0)
+      first_byte == 0x7B || (first_byte == 0x73 && encrypted.getbyte(1) == 0x3A)
     end
 
   end
